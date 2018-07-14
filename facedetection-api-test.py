@@ -12,9 +12,11 @@ import cognitive_face as CF
 # Key 1: 384d9d63abaf41cb8b9bcb5be8d41645
 # Key 2: e42128e1c50948d4b85275a39ffba132
 
-KEY = 'e42128e1c50948d4b85275a39ffba132'  # Replace with a valid subscription key (keeping the quotes in place).
+KEY = '384d9d63abaf41cb8b9bcb5be8d41645'  # Replace with a valid subscription key (keeping the quotes in place).
 CF.Key.set(KEY)
-           
+
+# SEA: southeastasia.api.cognitive.microsoft.com
+#BASE_URL = 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/'
 BASE_URL = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0'  # Replace with your regional Base URL
 CF.BaseUrl.set(BASE_URL)
 
