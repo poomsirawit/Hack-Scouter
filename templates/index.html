@@ -11,7 +11,7 @@
 <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
 <script type="text/javascript">
-    function processImage() {
+    function processImageL() {
         // Replace <Subscription Key> with your valid subscription key.
         var subscriptionKey = "e42128e1c50948d4b85275a39ffba132";
         var power = 0; 
@@ -37,8 +37,213 @@
         };
 
         // Display the image.
-        var sourceImageUrl = document.getElementById("inputImage").value;
-        document.querySelector("#sourceImage").src = sourceImageUrl;
+        var sourceImageUrl = document.getElementById("inputImageL").value;
+        document.querySelector("#sourceImageL").src = sourceImageUrl;
+
+        // Perform the REST API call.
+        $.ajax({
+            url: uriBase + "?" + $.param(params),
+
+            // Request headers.
+            beforeSend: function(xhrObj){
+                xhrObj.setRequestHeader("Content-Type","application/json");
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+            },
+
+            type: "POST",
+
+            // Request body.
+            data: '{"url": ' + '"' + sourceImageUrl + '"}',
+        })
+
+        .done(function(data) {
+            // Show formatted JSON on webpage.
+            $("#responseTextArea").val(JSON.stringify(data, null, 2));
+            
+            var faceAttributes = data[0].faceAttributes;
+            var emotion = faceAttributes.emotion;
+            var emotion_anger = emotion.anger;
+            //var age_number = faceAttributes.age;
+            //var accessory_number = faceAttributes.glasses;
+            //var anger_number = faceAttributes.emotion.anger;
+
+            //var power = 100 + age_number + anger_number*20;
+            
+            document.getElementById('param_gender').innerHTML = faceAttributes.gender;
+            document.getElementById('param_age').innerHTML = faceAttributes.age;
+            document.getElementById('param_accessory').innerHTML = faceAttributes.glasses;
+         //   document.getElementById('param_emotion_anger').innerHTML = emotion_anger;
+
+
+            power = Number(faceAttributes.age + Number(emotion_anger * 20) + 100);
+
+            document.getElementById('param_power').innerHTML = power;
+            
+            console.log(data);
+
+            console.log('gender', faceAttributes.gender);        
+            console.log('age', faceAttributes.age);
+            console.log('accessory', faceAttributes.glasses);
+            // console.log('emotion-anger', emotion_anger);
+            console.log('estimate-power', power);
+
+            //console.log('age_number', age_number);        
+            //console.log('anger_number', anger_number);
+            //console.log('power', power);
+
+            
+var rawData = power,
+  data = getData(rawData);
+
+function getData(rawData) {
+  var data = [],
+    start = Math.round(Math.floor(rawData / 10) * 10);
+  data.push(rawData);
+  for (i = start; i > 0; i -= 10) {
+    data.push({
+      y: i
+    });
+  }
+  return data;
+}
+
+Highcharts.chart('container', {
+  chart: {
+    type: 'solidgauge',
+    marginTop: 10
+  },
+  
+  title: {
+    text: ''
+  },
+  
+  subtitle: {
+    text: rawData,
+    style: {
+      'font-size': '60px'
+    },
+    y: 200,
+    zIndex: 7
+  },
+
+  tooltip: {
+    enabled: false
+  },
+
+  pane: [{
+    startAngle: -120,
+    endAngle: 120,
+    background: [{ // Track for Move
+      outerRadius: '100%',
+      innerRadius: '80%',
+      backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.3).get(),
+      borderWidth: 0,
+      shape: 'arc'
+    }],
+    size: '120%',
+    center: ['50%', '65%']
+  }, {
+    startAngle: -120,
+    endAngle: 120,
+    size: '95%',
+    center: ['50%', '65%'],
+    background: []
+  }],
+
+  yAxis: [{
+    min: 0,
+    max: 100,
+    lineWidth: 2,
+    lineColor: 'white',
+    tickInterval: 10,
+    labels: {
+      enabled: false
+    },
+    minorTickWidth: 0,
+    tickLength: 50,
+    tickWidth: 5,
+    tickColor: 'white',
+    zIndex: 6,
+    stops: [
+      [0, '#fff'],
+      [0.101, '#0f0'],
+      [0.201, '#2d0'],
+      [0.301, '#4b0'],
+      [0.401, '#690'],
+      [0.501, '#870'],
+      [0.601, '#a50'],
+      [0.701, '#c30'],
+      [0.801, '#e10'],
+      [0.901, '#f03'],
+      [1, '#f06']
+    ]
+  }, {
+    linkedTo: 0,
+    pane: 1,
+    lineWidth: 5,
+    lineColor: 'white',
+    tickPositions: [],
+    zIndex: 6
+  }],
+  
+  series: [{
+    animation: false,
+    dataLabels: {
+      enabled: false
+    },
+    borderWidth: 0,
+    color: Highcharts.getOptions().colors[0],
+    radius: '100%',
+    innerRadius: '80%',
+    data: data
+  }]
+});
+            
+        })
+
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            // Display error message.
+            var errorString = (errorThrown === "") ?
+                "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+            errorString += (jqXHR.responseText === "") ?
+                "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+                    jQuery.parseJSON(jqXHR.responseText).message :
+                        jQuery.parseJSON(jqXHR.responseText).error.message;
+            alert(errorString);
+        });
+        //document.getElementById("param2").innerHTML = params;  
+    };
+      
+</script>
+<script type="text/javascript">
+    function processImageH() {
+        // Replace <Subscription Key> with your valid subscription key.
+        var subscriptionKey = "e42128e1c50948d4b85275a39ffba132";
+        var power = 0; 
+
+        // NOTE: You must use the same region in your REST call as you used to
+        // obtain your subscription keys. For example, if you obtained your
+        // subscription keys from westus, replace "westcentralus" in the URL
+        // below with "westus".
+        //
+        // Free trial subscription keys are generated in the westcentralus region.
+        // If you use a free trial subscription key, you shouldn't need to change 
+        // this region.
+        var uriBase =
+            "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";       // Database from AZURE
+
+        // Request parameters.
+        var params = {
+            "returnFaceId": "true",
+            "returnFaceLandmarks": "false",
+            "returnFaceAttributes":
+                "age,gender,headPose,smile,facialHair,glasses,emotion," +
+                "hair,makeup,occlusion,accessories,blur,exposure,noise"
+        };
+
+        // Display the image.
+        var sourceImageUrl = document.getElementById("inputImageH").value;
+        document.querySelector("#sourceImageH").src = sourceImageUrl;
 
         // Perform the REST API call.
         $.ajax({
@@ -220,12 +425,18 @@ Highcharts.chart('container', {
 
 <div id="wrapper" style="width:500px; display:table;"> 
         <div class="alert alert-success" role="alert">
-<h1>Result:</h1>
-Insert image: <input type="text" name="inputImage" id="inputImage"
+<h1>Choose Person :(</h1>
+Low Power : <input type="text" name="inputImageL" id="inputImageL"
 
 value="https://www.online-idol.com/wp-content/uploads/2018/02/p-%E0%B8%A1%E0%B8%B4%E0%B8%A7%E0%B8%AA%E0%B8%B4%E0%B8%84-BNK48.jpg" />
 
-<button onclick="processImage()">Go Go ~</button><br><br>
+<button onclick="processImageL()"> Go Go 1 ~</button><br><br> 
+
+High Power : <input type="text" name="inputImageH" id="inputImageH"
+
+value="https://www.posttoday.com/media/content/2018/02/22/4DEA887B019342359A1AC84FC2D893D4.jpg" />
+
+<button onclick="processImageH()">Go Go 2 ~</button><br><br>
 </div>
 </div>
 <div id="wrapper" style="width:500px; display:table;">
@@ -243,10 +454,20 @@ value="https://www.online-idol.com/wp-content/uploads/2018/02/p-%E0%B8%A1%E0%B8%
     <div class="alert alert-success" role="alert">
     <a href="#" class="alert-link">
                 <div id="imageDiv" style="width:100px; display:table-cell;">
-                        <h2>Source image:</h2><br><br>
-                        <img id="sourceImage" width="400" />
+                        <h2>Person :)</h2><br><br>
+                        <img id="sourceImageL" width="400" />
+                                Low Power
+                </div>
     </a>
     
+    <div class="alert alert-success" role="alert">
+            <a href="#" class="alert-link">
+                        <div id="imageDiv" style="width:100px; display:table-cell;">
+                                <img id="sourceImageH" width="400" />
+                                High Power
+                        </div>
+            </a>
+
     <div class="alert alert-success" role="alert">            
     <h1>Properties:</h1>
     <a href="#" class="alert-link">Gender: <b id="param_gender"></b> </a> <br>
@@ -256,6 +477,10 @@ value="https://www.online-idol.com/wp-content/uploads/2018/02/p-%E0%B8%A1%E0%B8%
     </div>
 
 <div id="container" style="height: 300px;">
+    </div>
+    </div>
+</div>
+    </div>
 </center>
 
 {% endblock %}  <!-- html -->
