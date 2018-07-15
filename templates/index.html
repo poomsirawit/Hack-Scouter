@@ -65,16 +65,20 @@
             document.getElementById('param_gender').innerHTML = faceAttributes.gender;
             document.getElementById('param_age').innerHTML = faceAttributes.age;
             document.getElementById('param_accessory').innerHTML = faceAttributes.glasses;
-            document.getElementById('param_emotion_anger').innerHTML = emotion_anger;
+         //   document.getElementById('param_emotion_anger').innerHTML = emotion_anger;
 
-            //document.getElementById('param_power').innerHTML = power;
+
+            const power = Number(faceAttributes.age + Number(emotion_anger * 20) + 100);
+
+            document.getElementById('param_power').innerHTML = power;
             
             console.log(data);
 
             console.log('gender', faceAttributes.gender);        
             console.log('age', faceAttributes.age);
             console.log('accessory', faceAttributes.glasses);
-            console.log('emotion-anger', emotion_anger);
+            // console.log('emotion-anger', emotion_anger);
+            console.log('estimate-power', power);
 
             //console.log('age_number', age_number);        
             //console.log('anger_number', anger_number);
@@ -129,7 +133,7 @@ value="https://www.online-idol.com/wp-content/uploads/2018/02/p-%E0%B8%A1%E0%B8%
     <a href="#" class="alert-link">Gender: <b id="param_gender"></b> </a> <br>
     <a href="#" class="alert-link">Age: <b id="param_age"></b> </a> <br>
     <a href="#" class="alert-link">Status: <b id="param_accessory"></b> </a> <br>
-    <a href="#" class="alert-link">Estimate power: <b id="param_emotion_anger"></b> </a>
+    <a href="#" class="alert-link">Estimate power: <b id="param_power"></b> </a>
     </div>
 
 
