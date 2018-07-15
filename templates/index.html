@@ -54,18 +54,32 @@
             $("#responseTextArea").val(JSON.stringify(data, null, 2));
             
             var faceAttributes = data[0].faceAttributes;
+            var emotion = faceAttributes.emotion;
+            var emotion_anger = emotion.anger;
+            //var age_number = faceAttributes.age;
+            //var accessory_number = faceAttributes.glasses;
+            //var anger_number = faceAttributes.emotion.anger;
+
+            //var power = 100 + age_number + anger_number*20;
             
             document.getElementById('param_gender').innerHTML = faceAttributes.gender;
             document.getElementById('param_age').innerHTML = faceAttributes.age;
             document.getElementById('param_accessory').innerHTML = faceAttributes.glasses;
-            document.getElementById('param_emotion_anger').innerHTML = faceAttributes.emotion.anger;
+            document.getElementById('param_emotion_anger').innerHTML = emotion_anger;
+
+            //document.getElementById('param_power').innerHTML = power;
             
             console.log(data);
 
             console.log('gender', faceAttributes.gender);        
             console.log('age', faceAttributes.age);
             console.log('accessory', faceAttributes.glasses);
-            console.log('emotion-anger', faceAttributes.emotion.anger);
+            console.log('emotion-anger', emotion_anger);
+
+            //console.log('age_number', age_number);        
+            //console.log('anger_number', anger_number);
+            //console.log('power', power);
+            
         })
 
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -86,44 +100,37 @@
 <h1>Result:</h1>
 Insert image: <input type="text" name="inputImage" id="inputImage"
 
-value="http://static.trueplookpanya.com/tppy/member/m_545000_547500/545994/cms/images/2018-02-Feb/jennis_18.jpg" />
+value="https://www.online-idol.com/wp-content/uploads/2018/02/p-%E0%B8%A1%E0%B8%B4%E0%B8%A7%E0%B8%AA%E0%B8%B4%E0%B8%84-BNK48.jpg" />
 
 <button onclick="processImage()">Go Go ~</button><br><br>
 
 <div id="wrapper" style="width:1020px; display:table;">
-
+    <!--
     <div id="jsonOutput" style="width:600px; display:table-cell;">
         Results:<br><br>
 
+       
         <textarea id="responseTextArea" class="UIInput"
                   style="width:580px; height:400px;"></textarea>
-                
+              
                 
     </div>
-
+    -->  
     <div class="alert alert-success" role="alert">
     <a href="#" class="alert-link">
                  <div id="imageDiv" style="width:420px; display:table-cell;">
                         Source image:<br><br>
                         <img id="sourceImage" width="400" />
-                </div>
-    </a>
+                
+                
+                <h1>Information</h1>
+                <a href="#" class="alert-link">Gender: <b id="param_gender"></b> </a><br>
+                <a href="#" class="alert-link">Age: <b id="param_age"></b></a><br>
+                <a href="#" class="alert-link">Status: <b id="param_accessory"></b></a><br>
+                <a href="#" class="alert-link">Estimate power: <b id="param_emotion_anger"></b></a>
+    </div>
 
-</div>
 
-<h1>Information</h1>
-
-<div class="alert alert-success" role="alert">
-    <a href="#" class="alert-link">Gender: <b id="param_gender"></b> </a>
-</div>
-<div class="alert alert-info" role="alert">
-    <a href="#" class="alert-link">Age: <b id="param_age"></b></a>
-</div>
-<div class="alert alert-warning" role="alert">
-    <a href="#" class="alert-link">Status: <b id="param_accessory"></b></a>
-</div>
-<div class="alert alert-danger" role="alert">
-    <a href="#" class="alert-link">Estimate power: <b id="param_emotion_anger"></b></a>
 </div>
 
 {% endblock %}  <!-- html -->
